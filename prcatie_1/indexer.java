@@ -23,22 +23,22 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class makeIpost {
+public class indexer {
 	private String input_file;
 	private String output_file = "C:\\Users\\이민효\\Desktop\\opensw\\SimpleIR\\prcatie_1\\src\\prcatie_1\\index.post";
-	
-	
-	public makeIpost(String file) throws Exception{
+
+
+	public indexer(String file) throws Exception{
 		input_file = file;
 	}
-	
-	
+
+
 	public void makePost() throws Exception{
 		FileOutputStream filestream = new FileOutputStream(output_file);
-		
+
 		ObjectOutputStream objectOutputStream = new ObjectOutputStream(filestream);
 	      DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-	      
+
 	      docFactory.setIgnoringElementContentWhitespace(true);
 
 	      DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -58,7 +58,7 @@ public class makeIpost {
 	             Node nNode = nList.item(b);
 	             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
 	             Element eElement = (Element) nNode;
-	             
+
 	             String test = eElement.getElementsByTagName("body").item(0).getTextContent();
 	             String tagdata[] = test.split("#");
 	             int i = 0;
@@ -76,16 +76,16 @@ public class makeIpost {
 	            	 wholedata.put(inputstr[0],inputstr[1]); //여기서 value값을 ID값까지 넣어주면 되나??
 	            	 i++;
 	             	}
-	             
+
 	             }
 	      }//모든데이터가 들어있는 해시맵
-	      
+
 	      for(int b = 0; b < 5; b++) {
 	             Node nNode = nList.item(b);
 	             HashMap hashmap = new HashMap();
 	             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
 	             Element eElement = (Element) nNode;
-	             
+
 	             String test = eElement.getElementsByTagName("body").item(0).getTextContent();
 	             String tagdata[] = test.split("#");
 	             int i = 0;
@@ -94,14 +94,14 @@ public class makeIpost {
 		             Iterator<String> it = wholedata.keySet().iterator();
 	            	 String sdata = tagdata[i];
 	            	 String inputstr[] = sdata.split(":");
-	            	  
+
 	            	 hashmap.put(inputstr[0],inputstr[1]); //여기서 value값을 ID값까지 넣어주면 되나??
-	            	
+
 	            	 i++;
-	            	 
+
 	             	}
 	             Iterator<String> it = dfx.keySet().iterator();
-	            
+
 	             while(it.hasNext()) {
 	            	 double weight = 0.00;
 	            	 String dkey = it.next();
@@ -122,19 +122,19 @@ public class makeIpost {
 	            	 str += b + ":" + weight + " ";
 	            	 resulthash.put(dkey, str);
 	             }
-	             
+
 	             }
 	      }
-	      
-	      
-	    
+
+
+
    	   objectOutputStream.writeObject(resulthash);
    	   objectOutputStream.close();
-	    
+
 	}
 	public void ReadPost() throws Exception{
 		FileInputStream filestream = new FileInputStream(output_file);
-		
+
 		ObjectInputStream objectinputStream = new ObjectInputStream(filestream);
 		Object object = objectinputStream.readObject();
 		objectinputStream.close();
@@ -146,4 +146,4 @@ public class makeIpost {
  	    	  System.out.println( key + " > " + value4);
  	      }
 	}
-}
+} 

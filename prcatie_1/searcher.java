@@ -44,7 +44,9 @@ public class searcher {
 		this.input_file = file;
 	}
 
-	public void searchIndex(String Query) throws Exception {
+	public void calcSim(String Query) throws Exception {
+
+
 		input_String = Query;
 		KeywordExtractor ke = new KeywordExtractor();
 		KeywordList k1 = ke.extractKeyword(input_String, true);
@@ -86,24 +88,37 @@ public class searcher {
 		Iterator<String> it2 = selecthash.keySet().iterator();
 		Iterator<String> it3 = hashmap.keySet().iterator();
 		double[] result = new double[5];
+		double[] Aw = new double[5];
+		double[] Bv = new double[5];
 		while (it2.hasNext()) {
 			String skey = it2.next();
 			String hkey = it3.next();
 			int hvalue = Integer.parseInt((String) hashmap.get(skey));
 			String svalue = (String) selecthash.get(skey);
 			String[] selectString = svalue.split(" ");
-			
-			int loop = selectString.length - 1;
-			for (int b = 0; b < loop; b = b + 2) {
-				Double weight = Double.parseDouble(selectString[b + 2]);
-				result[b / 2] += weight * hvalue;
+			int ab = 1;
+			int loop = 5;
+			for (int b = 0; b < loop; b++) {
+				String rs[] = selectString[ab].split(":");
+				Double weight = Double.parseDouble(rs[1]);
+				result[b] += weight * hvalue;
+				Aw[b] += weight * weight;
+				Bv[b] += hvalue * hvalue;
+				ab++;
 			}
 		}
 		
 		
 		String[] resultnum = new String[3];
 		Map<String, Double> hm = new HashMap();
-
+		for(int t = 0; t < 5; t++) {
+			Aw[t] = Math.sqrt(Aw[t]);
+			Bv[t] = Math.sqrt(Bv[t]);
+			result[t] = result[t]/ Aw[t] * Bv[t];
+			if(Double.isNaN(result[t])) {
+				result[t] = 0.0;
+			}
+		}
 		for(int f = 0; f < 5; f++) {
 			String tmp2 = Integer.toString(f);
 			hm.put(tmp2, (double) result[f]);
@@ -125,7 +140,7 @@ public class searcher {
             }
         });
  
-        // 순서유지를 위해 LinkedHashMap을 사용
+
         Map<String, Double> sortedMap = new LinkedHashMap<>();
         for(Iterator<Map.Entry<String, Double>> iter = list.iterator(); iter.hasNext();){
             Map.Entry<String, Double> entry = iter.next();
@@ -137,13 +152,12 @@ public class searcher {
         for(int c = 0; c< 3; c++) {
         	resultnum[c] = it4.next();
         	resultvalue[c] = sortedMap.get(resultnum[c]);
-        	System.out.println(resultvalue[c]);
         }
         
         File dir = new File(xml_location);
         org.jsoup.nodes.Document xml = Jsoup.parse(dir, "UTF-8");
         if(resultvalue[0]==0 &&resultvalue[1]==0 && resultvalue[2]==0) {
-        	System.out.println("모든 유사도가 0입니다.");
+        	System.out.println("모든 유사도가 0입니다");
         }
         else {
             for(int g = 0; g < 3; g++) {
