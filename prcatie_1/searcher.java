@@ -44,7 +44,7 @@ public class searcher {
 		this.input_file = file;
 	}
 
-	public void calcSim(String Query) throws Exception {
+	public void calcsim(String Query) throws Exception {
 
 
 		input_String = Query;
