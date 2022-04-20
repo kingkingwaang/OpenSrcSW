@@ -27,7 +27,7 @@ public class kuir {
 			String query = args[3];
 			searcher search = new searcher(path);
 			if(command2.equals("-q")) {
-			search.calcsim(query);
+			search.calcSim(query);
 			}
 		}
 	}
