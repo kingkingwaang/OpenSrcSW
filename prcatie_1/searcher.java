@@ -44,8 +44,8 @@ public class searcher {
 		this.input_file = file;
 	}
 
-	public void calcSim(String Query) throws Exception {
 
+	public void Innerproduct(String Query) throws Exception {
 
 		input_String = Query;
 		KeywordExtractor ke = new KeywordExtractor();
