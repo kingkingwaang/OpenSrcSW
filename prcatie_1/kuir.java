@@ -31,5 +31,15 @@ public class kuir {
 			}
 
 		}
+		if(command.equals("-m")) {
+			String command3 = args[2];
+			String command4 = args[3];
+			if(command3.equals("-q")) {
+				String query2 = command4;
+				MidTerm mid = new MidTerm(path,query2);
+
+				mid.mid();
+			}
+		}
 	}
 }
